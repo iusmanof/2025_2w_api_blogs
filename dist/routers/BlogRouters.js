@@ -11,7 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlogRouter = void 0;
 const express_1 = require("express");
+const StatusCode_1 = require("../StatusCode");
+const blogsDB_1 = require("../DB/blogsDB");
 exports.BlogRouter = (0, express_1.Router)();
 exports.BlogRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.setHeader("Content-Type", "application/json").send("blog");
+    res.send(StatusCode_1.HTTP_STATUS.OK_200).send(blogsDB_1.blogsDB);
 }));
