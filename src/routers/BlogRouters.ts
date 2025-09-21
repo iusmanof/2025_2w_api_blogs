@@ -54,8 +54,6 @@ BlogRouter.put('/:id', (req: Request, res: Response<BlogViewModel | {
 })
 
 BlogRouter.delete('/:id', (req: RequestWithParams<{ id: string }>, res: Response) => {
-  // const blogId = blogsDB.findIndex(v => +v.id === +req.params.id)
-
   deleteBlog(req.params.id)
   res.status(HTTP_STATUS.NO_CONTENT_204).send()
 })

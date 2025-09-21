@@ -44,7 +44,6 @@ exports.BlogRouter.put('/:id', (req, res) => {
     res.status(StatusCode_1.HTTP_STATUS.NO_CONTENT_204).send();
 });
 exports.BlogRouter.delete('/:id', (req, res) => {
-    // const blogId = blogsDB.findIndex(v => +v.id === +req.params.id)
     (0, blogsDB_1.deleteBlog)(req.params.id);
     res.status(StatusCode_1.HTTP_STATUS.NO_CONTENT_204).send();
 });
