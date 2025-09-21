@@ -2,8 +2,10 @@
   "name": "2025_2w_api_blogs",
   "packageManager": "yarn@4.9.2",
   "scripts": {
+    "watch": "tsc -w",
     "dev": "nodemon --inspect dist/index.js",
-    "watch": "tsc -w"
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "express": "^5.1.0"
