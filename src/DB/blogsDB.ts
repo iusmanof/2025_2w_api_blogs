@@ -2,6 +2,10 @@ import {BlogViewModel} from "../model_types/BlogViewModel";
 
 export let blogsDB: BlogViewModel[] = []
 
+export function deleteAllBlogs (){
+  blogsDB = []
+}
+
 export function addBlog(blog: BlogViewModel) {
   blogsDB = [...blogsDB, blog]
 }
