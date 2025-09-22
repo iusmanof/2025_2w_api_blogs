@@ -28,21 +28,20 @@ exports.BlogRouter.get('/:id', (req, res) => {
 });
 exports.BlogRouter.post('/', auth_1.basicAuth, [
     (0, express_validator_1.body)('name')
-        .isString()
-        .isLength({ min: 1, max: 15 }).withMessage('name length must be 1-15 characters'),
+        .exists().withMessage("name is required")
+        .isString().withMessage("Must be string")
+        .isLength({ min: 1, max: 15 }).withMessage("name length must be 1-15 characters"),
     (0, express_validator_1.body)('websiteUrl')
-        .isString()
-        .isURL().withMessage('websiteUrl must be a valid URL'),
-    (0, express_validator_1.body)('description')
-        .isString()
-        .isLength({ max: 500 }).withMessage('description max length 500'),
+        .exists().withMessage("websiteUrl is required")
+        .isString().withMessage("Must be string")
+        .isURL().withMessage("websiteUrl must be a valid URL"),
 ], (req, res) => {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
             errorsMessages: errors.array().map(err => ({
                 message: err.msg,
-                field: "body"
+                field: err.msg.field, // вот здесь должно быть правильное поле, например "name" или "websiteUrl"
             })),
         });
     }

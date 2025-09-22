@@ -27,28 +27,27 @@ BlogRouter.post(
   basicAuth,
   [
     body('name')
-      .isString()
-      .isLength({ min: 1, max: 15 }).withMessage('name length must be 1-15 characters'),
+      .exists().withMessage("name is required")
+      .isString().withMessage("Must be string")
+      .isLength({ min: 1, max: 15 }).withMessage("name length must be 1-15 characters"),
 
     body('websiteUrl')
-      .isString()
-      .isURL().withMessage('websiteUrl must be a valid URL'),
-
-    body('description')
-      .isString()
-      .isLength({ max: 500 }).withMessage('description max length 500'),
+      .exists().withMessage("websiteUrl is required")
+      .isString().withMessage("Must be string")
+      .isURL().withMessage("websiteUrl must be a valid URL"),
   ],
-  (req: RequestWithBody<BlogInputModel>, res: Response<BlogViewModel | { errorsMessages: FieldError[] }>) => {
+  (req: any, res: any) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
         errorsMessages: errors.array().map(err => ({
           message: err.msg,
-          field: "body"
+          field: err.msg.field,  // вот здесь должно быть правильное поле, например "name" или "websiteUrl"
         })),
       });
     }
-  const {name, description, websiteUrl} = req.body
+
+    const {name, description, websiteUrl} = req.body
 
   const createdBlog: BlogViewModel = {
     id: Math.floor(Math.random() * 1000000).toString(),
