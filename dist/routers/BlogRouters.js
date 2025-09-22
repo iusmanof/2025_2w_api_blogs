@@ -15,7 +15,7 @@ const StatusCode_1 = require("../StatusCode");
 const blogsDB_1 = require("../DB/blogsDB");
 exports.BlogRouter = (0, express_1.Router)();
 exports.BlogRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send(StatusCode_1.HTTP_STATUS.OK_200).send(blogsDB_1.blogsDB);
+    res.status(StatusCode_1.HTTP_STATUS.OK_200).send(blogsDB_1.blogsDB);
 }));
 exports.BlogRouter.get('/:id', (req, res) => {
     const foundBlog = blogsDB_1.blogsDB.find(v => +v.id === +req.params.id);

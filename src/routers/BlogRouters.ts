@@ -8,7 +8,7 @@ import {APIErrorResult} from "../model_types/APIErrorResult";
 export const BlogRouter = Router();
 
 BlogRouter.get("/", async (req: Request, res: Response) => {
-  res.send(HTTP_STATUS.OK_200).send(blogsDB)
+  res.status(HTTP_STATUS.OK_200).send(blogsDB)
 })
 
 BlogRouter.get('/:id', (req: RequestWithParams<{ id: number }>, res: Response) => {
