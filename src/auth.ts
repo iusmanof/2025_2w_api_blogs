@@ -9,10 +9,10 @@ export const basicAuth = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"];
 
   if (!authHeader || !authHeader.startsWith("Basic ")) {
-    return res.status(404);
+   return  res.status(404);
   }
 
-  const base64Credentials = authHeader.split(" ")[1];
+  const base64Credentials: string = authHeader.split(" ")[1];
   const credentials = Buffer.from(base64Credentials, "base64").toString("utf-8");
   const [username, password] = credentials.split(":");
 
@@ -20,5 +20,5 @@ export const basicAuth = (req: Request, res: Response, next: NextFunction) => {
     return next();
   }
 
-  return res.status(401)
+  res.status(401)
 };
