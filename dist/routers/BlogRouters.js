@@ -40,10 +40,8 @@ exports.BlogRouter.post('/', auth_1.basicAuth, (req, res) => {
 });
 exports.BlogRouter.put('/:id', auth_1.basicAuth, (req, res) => {
     const blogId = blogsDB_1.blogsDB.findIndex(v => +v.id === +req.params.id);
-    const apiErrorMsg = [];
     if (blogId === -1) {
-        apiErrorMsg.push({ message: "ID Not found", field: "id" });
-        res.status(StatusCode_1.HTTP_STATUS.NOT_FOUND_404).json({ errorsMessages: apiErrorMsg });
+        res.status(StatusCode_1.HTTP_STATUS.NOT_FOUND_404);
     }
     const updatedBlog = Object.assign(Object.assign({}, blogsDB_1.blogsDB[blogId]), { name: req.body.name, description: req.body.description, websiteUrl: req.body.websiteUrl });
     (0, blogsDB_1.updateBlog)(updatedBlog, blogId);

@@ -42,11 +42,9 @@ BlogRouter.put('/:id', basicAuth ,(req: Request, res: Response<BlogViewModel | {
   errorsMessages: FieldError[]
 }>) => {
   const blogId = blogsDB.findIndex(v => +v.id === +req.params.id)
-  const apiErrorMsg: FieldError[] = []
 
   if (blogId === -1) {
-    apiErrorMsg.push({ message: "ID Not found", field: "id"})
-    res.status(HTTP_STATUS.NOT_FOUND_404).json({errorsMessages: apiErrorMsg});
+    res.status(HTTP_STATUS.NOT_FOUND_404)
   }
 
   const updatedBlog: BlogViewModel = {
