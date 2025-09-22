@@ -27,18 +27,15 @@ BlogRouter.post(
   basicAuth,
   [
     body('name')
-      .exists().withMessage('name is required')
-      .isString().withMessage('name must be a string')
+      .isString()
       .isLength({ min: 1, max: 15 }).withMessage('name length must be 1-15 characters'),
 
     body('websiteUrl')
-      .exists().withMessage('websiteUrl is required')
-      .isString().withMessage('websiteUrl must be a string')
+      .isString()
       .isURL().withMessage('websiteUrl must be a valid URL'),
 
     body('description')
-      .optional()
-      .isString().withMessage('description must be a string')
+      .isString()
       .isLength({ max: 500 }).withMessage('description max length 500'),
   ],
   (req: RequestWithBody<BlogInputModel>, res: Response<BlogViewModel | { errorsMessages: FieldError[] }>) => {
