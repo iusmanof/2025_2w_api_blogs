@@ -20,5 +20,5 @@ export const basicAuth = (req: Request, res: Response, next: NextFunction) => {
     return next();
   }
 
-  return res.status(404)
+  return res.status(401)
 };

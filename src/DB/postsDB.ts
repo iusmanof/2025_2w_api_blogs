@@ -2,7 +2,7 @@ import {PostViewModel} from "../model_types/PostViewModel";
 
 export let postsDB: PostViewModel[] = []
 
-export function dalateAllPosts() {
+export function deleteAllPosts() {
   postsDB = [];
 }
 

@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postsDB = void 0;
-exports.dalateAllPosts = dalateAllPosts;
+exports.deleteAllPosts = deleteAllPosts;
 exports.addPost = addPost;
 exports.postsDB = [];
-function dalateAllPosts() {
+function deleteAllPosts() {
     exports.postsDB = [];
 }
 function addPost(post) {

@@ -1,8 +1,8 @@
 import express, {Request, Response} from "express";
 import {BlogRouter} from "./routers/BlogRouters";
 import {PostRouter} from "./routers/PostRouters";
-import {blogsDB, deleteAllBlogs} from "./DB/blogsDB";
-import {dalateAllPosts} from "./DB/postsDB";
+import { deleteAllBlogs} from "./DB/blogsDB";
+import { deleteAllPosts} from "./DB/postsDB";
 
 const app = express()
 const port = process.env.port || 3000
@@ -17,7 +17,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.delete('/testing/all-data', (req: Request, res: Response) => {
   deleteAllBlogs()
-  dalateAllPosts()
+  deleteAllPosts()
   res.status(204).send("All data is deleted")
 })
 

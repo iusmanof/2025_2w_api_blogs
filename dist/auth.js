@@ -14,6 +14,6 @@ const basicAuth = (req, res, next) => {
     if (username === USERNAME && password === PASSWORD) {
         return next();
     }
-    return res.status(404);
+    return res.status(401);
 };
 exports.basicAuth = basicAuth;

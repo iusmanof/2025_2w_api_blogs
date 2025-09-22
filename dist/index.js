@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 });
 app.delete('/testing/all-data', (req, res) => {
     (0, blogsDB_1.deleteAllBlogs)();
-    (0, postsDB_1.dalateAllPosts)();
+    (0, postsDB_1.deleteAllPosts)();
     res.status(204).send("All data is deleted");
 });
 app.listen(port, () => {
