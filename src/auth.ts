@@ -9,7 +9,7 @@ export const basicAuth = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"];
 
   if (!authHeader || !authHeader.startsWith("Basic ")) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(404);
   }
 
   const base64Credentials = authHeader.split(" ")[1];
@@ -20,5 +20,5 @@ export const basicAuth = (req: Request, res: Response, next: NextFunction) => {
     return next();
   }
 
-  return res.status(401).json({ message: "Invalid credentials" });
+  return res.status(404)
 };
