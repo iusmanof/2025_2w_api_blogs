@@ -28,12 +28,12 @@ exports.BlogRouter.get('/:id', (req, res) => {
 });
 exports.BlogRouter.post('/', auth_1.basicAuth, [
     (0, express_validator_1.body)('name')
-        .exists().withMessage("name is required")
-        .isString().withMessage("Must be string")
+        .exists()
+        .isString()
         .isLength({ min: 1, max: 15 }).withMessage("name length must be 1-15 characters"),
     (0, express_validator_1.body)('websiteUrl')
-        .exists().withMessage("websiteUrl is required")
-        .isString().withMessage("Must be string")
+        .exists()
+        .isString()
         .isURL().withMessage("websiteUrl must be a valid URL"),
 ], (req, res) => {
     const errors = (0, express_validator_1.validationResult)(req);
