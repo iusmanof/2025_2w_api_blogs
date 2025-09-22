@@ -28,15 +28,24 @@ exports.BlogRouter.get('/:id', (req, res) => {
 });
 exports.BlogRouter.post('/', auth_1.basicAuth, [
     (0, express_validator_1.body)('name')
-        .isString().withMessage("Must be string")
-        .isLength({ min: 4, max: 15 }).withMessage("Max symbols: 15"),
+        .exists().withMessage('name is required')
+        .isString().withMessage('name must be a string')
+        .isLength({ min: 1, max: 15 }).withMessage('name length must be 1-15 characters'),
+    (0, express_validator_1.body)('websiteUrl')
+        .exists().withMessage('websiteUrl is required')
+        .isString().withMessage('websiteUrl must be a string')
+        .isURL().withMessage('websiteUrl must be a valid URL'),
+    (0, express_validator_1.body)('description')
+        .optional()
+        .isString().withMessage('description must be a string')
+        .isLength({ max: 500 }).withMessage('description max length 500'),
 ], (req, res) => {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
             errorsMessages: errors.array().map(err => ({
                 message: err.msg,
-                field: req.body['name']
+                field: "body"
             })),
         });
     }
