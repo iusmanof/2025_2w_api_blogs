@@ -21,15 +21,25 @@ BlogRouter.get('/:id', (req: RequestWithParams<{ id: number }>, res: Response) =
   }
   res.status(200).json(foundBlog)
 })
-BlogRouter.post('/',basicAuth ,
+
+BlogRouter.post(
+  '/',
+  basicAuth,
   [
-    body('name').isString().withMessage("Must be string").isLength({ min: 1, max: 15}).withMessage("Max symbols: 15"),
-  ]
-  ,(req: RequestWithBody<BlogInputModel>, res: any) => {
-  const errorMessages = validationResult(req)
-  if (!errorMessages) {
-    return res.status(400).json(errorMessages)
-  }
+    body('name')
+      .isString().withMessage("Must be string")
+      .isLength({ min: 4, max: 15 }).withMessage("Max symbols: 15"),
+  ],
+  (req: RequestWithBody<BlogInputModel>, res: Response<BlogViewModel | { errorsMessages: FieldError[] }>) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errorsMessages: errors.array().map(err => ({
+          message: err.msg,
+          field: req.body['name']
+        })),
+      });
+    }
   const {name, description, websiteUrl} = req.body
 
   const createdBlog: BlogViewModel = {
@@ -39,7 +49,7 @@ BlogRouter.post('/',basicAuth ,
     websiteUrl: websiteUrl,
   }
   addBlog(createdBlog)
-  res
+  return res
     .status(HTTP_STATUS.CREATED_201)
     .json(createdBlog)
 })

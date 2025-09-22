@@ -27,11 +27,18 @@ exports.BlogRouter.get('/:id', (req, res) => {
     res.status(200).json(foundBlog);
 });
 exports.BlogRouter.post('/', auth_1.basicAuth, [
-    (0, express_validator_1.body)('name').isString().withMessage("Must be string").isLength({ min: 1, max: 15 }).withMessage("Max symbols: 15"),
+    (0, express_validator_1.body)('name')
+        .isString().withMessage("Must be string")
+        .isLength({ min: 4, max: 15 }).withMessage("Max symbols: 15"),
 ], (req, res) => {
-    const errorMessages = (0, express_validator_1.validationResult)(req);
-    if (!errorMessages) {
-        return res.status(400).json(errorMessages);
+    const errors = (0, express_validator_1.validationResult)(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            errorsMessages: errors.array().map(err => ({
+                message: err.msg,
+                field: req.body['name']
+            })),
+        });
     }
     const { name, description, websiteUrl } = req.body;
     const createdBlog = {
@@ -41,7 +48,7 @@ exports.BlogRouter.post('/', auth_1.basicAuth, [
         websiteUrl: websiteUrl,
     };
     (0, blogsDB_1.addBlog)(createdBlog);
-    res
+    return res
         .status(StatusCode_1.HTTP_STATUS.CREATED_201)
         .json(createdBlog);
 });
