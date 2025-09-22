@@ -50,8 +50,8 @@ exports.BlogRouter.put('/:id', auth_1.basicAuth, (req, res) => {
     return res.status(StatusCode_1.HTTP_STATUS.NO_CONTENT_204).send();
 });
 exports.BlogRouter.delete('/:id', auth_1.basicAuth, (req, res) => {
-    const blodId = blogsDB_1.blogsDB.findIndex(v => v.id === req.params.id);
-    if (blodId === -1) {
+    const blogId = blogsDB_1.blogsDB.findIndex(v => v.id === req.params.id);
+    if (blogId === -1) {
         res.status(StatusCode_1.HTTP_STATUS.NOT_FOUND_404).send("Not found");
     }
     (0, blogsDB_1.deleteBlog)(req.params.id);

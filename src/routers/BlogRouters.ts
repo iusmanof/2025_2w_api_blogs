@@ -61,8 +61,8 @@ BlogRouter.put('/:id', basicAuth ,(req: Request, res: Response<BlogViewModel | {
 })
 
 BlogRouter.delete('/:id', basicAuth, (req: RequestWithParams<{ id: string }>, res: Response) => {
-  const blodId = blogsDB.findIndex(v => v.id === req.params.id)
-  if (blodId === -1) {
+  const blogId = blogsDB.findIndex(v => v.id === req.params.id)
+  if (blogId === -1) {
     res.status(HTTP_STATUS.NOT_FOUND_404).send("Not found")
   }
 
