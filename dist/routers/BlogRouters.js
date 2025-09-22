@@ -14,9 +14,10 @@ const express_1 = require("express");
 const StatusCode_1 = require("../StatusCode");
 const blogsDB_1 = require("../DB/blogsDB");
 const auth_1 = require("../auth");
+const express_validator_1 = require("express-validator");
 exports.BlogRouter = (0, express_1.Router)();
 exports.BlogRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(StatusCode_1.HTTP_STATUS.OK_200).send(blogsDB_1.blogsDB);
+    yield res.status(StatusCode_1.HTTP_STATUS.OK_200).send(blogsDB_1.blogsDB);
 }));
 exports.BlogRouter.get('/:id', (req, res) => {
     const foundBlog = blogsDB_1.blogsDB.find(v => +v.id === +req.params.id);
@@ -25,7 +26,13 @@ exports.BlogRouter.get('/:id', (req, res) => {
     }
     res.status(200).json(foundBlog);
 });
-exports.BlogRouter.post('/', auth_1.basicAuth, (req, res) => {
+exports.BlogRouter.post('/', auth_1.basicAuth, [
+    (0, express_validator_1.body)('name').isString().withMessage("Must be string").isLength({ min: 1, max: 15 }).withMessage("Max symbols: 15"),
+], (req, res) => {
+    const errorMessages = (0, express_validator_1.validationResult)(req);
+    if (!errorMessages) {
+        return res.status(400).json(errorMessages);
+    }
     const { name, description, websiteUrl } = req.body;
     const createdBlog = {
         id: Math.floor(Math.random() * 1000000).toString(),

@@ -3,15 +3,15 @@ import {HTTP_STATUS} from "../StatusCode";
 import {addBlog, blogsDB, deleteBlog, updateBlog} from "../DB/blogsDB";
 import {RequestWithBody, RequestWithParams} from "../model_types/RequestTypes";
 import {BlogViewModel} from "../model_types/BlogViewModel";
-import {APIErrorResult} from "../model_types/APIErrorResult";
 import {basicAuth} from "../auth";
 import {BlogInputModel} from "../model_types/BlogInputModel";
 import {FieldError} from "../model_types/FieldError";
+import {body, validationResult} from "express-validator";
 
 export const BlogRouter = Router();
 
 BlogRouter.get("/", async (req: Request, res: Response) => {
-  res.status(HTTP_STATUS.OK_200).send(blogsDB)
+  await res.status(HTTP_STATUS.OK_200).send(blogsDB)
 })
 BlogRouter.get('/:id', (req: RequestWithParams<{ id: number }>, res: Response) => {
   const foundBlog: BlogViewModel | undefined = blogsDB.find(v => +v.id === +req.params.id)
@@ -21,9 +21,15 @@ BlogRouter.get('/:id', (req: RequestWithParams<{ id: number }>, res: Response) =
   }
   res.status(200).json(foundBlog)
 })
-BlogRouter.post('/',basicAuth ,(req: RequestWithBody<BlogInputModel>, res: Response<BlogViewModel | {
-  errorsMessages: APIErrorResult[]
-}>) => {
+BlogRouter.post('/',basicAuth ,
+  [
+    body('name').isString().withMessage("Must be string").isLength({ min: 1, max: 15}).withMessage("Max symbols: 15"),
+  ]
+  ,(req: RequestWithBody<BlogInputModel>, res: any) => {
+  const errorMessages = validationResult(req)
+  if (!errorMessages) {
+    return res.status(400).json(errorMessages)
+  }
   const {name, description, websiteUrl} = req.body
 
   const createdBlog: BlogViewModel = {
