@@ -5,6 +5,7 @@ const USERNAME = "admin";
 const PASSWORD = "qwerty";
 const basicAuth = (req, res, next) => {
     const authHeader = req.headers["authorization"];
+    console.log(req.headers.authorization);
     if (!authHeader || !authHeader.startsWith("Basic ")) {
         return res.status(401).send("Unauthorized");
     }
@@ -14,6 +15,6 @@ const basicAuth = (req, res, next) => {
     if (username === USERNAME && password === PASSWORD) {
         return next();
     }
-    res.status(401);
+    res.status(401).send("Unauthorized");
 };
 exports.basicAuth = basicAuth;
