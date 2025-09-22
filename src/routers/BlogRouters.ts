@@ -4,6 +4,7 @@ import {addBlog, blogsDB, deleteBlog, updateBlog} from "../DB/blogsDB";
 import {RequestWithBody, RequestWithParams} from "../model_types/RequestTypes";
 import {BlogViewModel} from "../model_types/BlogViewModel";
 import {APIErrorResult} from "../model_types/APIErrorResult";
+import {basicAuth} from "../auth";
 
 export const BlogRouter = Router();
 
@@ -20,7 +21,7 @@ BlogRouter.get('/:id', (req: RequestWithParams<{ id: number }>, res: Response) =
   res.status(200).json(foundBlog)
 })
 
-BlogRouter.post('/', (req: RequestWithBody<BlogViewModel>, res: Response<BlogViewModel | {
+BlogRouter.post('/',basicAuth ,(req: RequestWithBody<BlogViewModel>, res: Response<BlogViewModel | {
   errorsMessages: APIErrorResult[]
 }>) => {
   const {name, description, websiteUrl} = req.body
@@ -37,7 +38,7 @@ BlogRouter.post('/', (req: RequestWithBody<BlogViewModel>, res: Response<BlogVie
     .json(createdBlog)
 })
 
-BlogRouter.put('/:id', (req: Request, res: Response<BlogViewModel | {
+BlogRouter.put('/:id', basicAuth ,(req: Request, res: Response<BlogViewModel | {
   errorsMessages: APIErrorResult[]
 }>) => {
   const blogId = blogsDB.findIndex(v => +v.id === +req.params.id)
@@ -53,7 +54,7 @@ BlogRouter.put('/:id', (req: Request, res: Response<BlogViewModel | {
   res.status(HTTP_STATUS.NO_CONTENT_204).send()
 })
 
-BlogRouter.delete('/:id', (req: RequestWithParams<{ id: string }>, res: Response) => {
+BlogRouter.delete('/:id', basicAuth, (req: RequestWithParams<{ id: string }>, res: Response) => {
   deleteBlog(req.params.id)
   res.status(HTTP_STATUS.NO_CONTENT_204).send()
 })

@@ -13,6 +13,7 @@ exports.BlogRouter = void 0;
 const express_1 = require("express");
 const StatusCode_1 = require("../StatusCode");
 const blogsDB_1 = require("../DB/blogsDB");
+const auth_1 = require("../auth");
 exports.BlogRouter = (0, express_1.Router)();
 exports.BlogRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(StatusCode_1.HTTP_STATUS.OK_200).send(blogsDB_1.blogsDB);
@@ -24,7 +25,7 @@ exports.BlogRouter.get('/:id', (req, res) => {
     }
     res.status(200).json(foundBlog);
 });
-exports.BlogRouter.post('/', (req, res) => {
+exports.BlogRouter.post('/', auth_1.basicAuth, (req, res) => {
     const { name, description, websiteUrl } = req.body;
     const createdBlog = {
         id: Math.floor(Math.random() * 1000000).toString(),
@@ -37,13 +38,13 @@ exports.BlogRouter.post('/', (req, res) => {
         .status(StatusCode_1.HTTP_STATUS.CREATED_201)
         .json(createdBlog);
 });
-exports.BlogRouter.put('/:id', (req, res) => {
+exports.BlogRouter.put('/:id', auth_1.basicAuth, (req, res) => {
     const blogId = blogsDB_1.blogsDB.findIndex(v => +v.id === +req.params.id);
     const updatedBlog = Object.assign(Object.assign({}, blogsDB_1.blogsDB[blogId]), { name: req.body.name, description: req.body.description, websiteUrl: req.body.websiteUrl });
     (0, blogsDB_1.updateBlog)(updatedBlog, blogId);
     res.status(StatusCode_1.HTTP_STATUS.NO_CONTENT_204).send();
 });
-exports.BlogRouter.delete('/:id', (req, res) => {
+exports.BlogRouter.delete('/:id', auth_1.basicAuth, (req, res) => {
     (0, blogsDB_1.deleteBlog)(req.params.id);
     res.status(StatusCode_1.HTTP_STATUS.NO_CONTENT_204).send();
 });
