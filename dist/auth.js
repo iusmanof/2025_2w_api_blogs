@@ -6,7 +6,7 @@ const PASSWORD = "qwerty";
 const basicAuth = (req, res, next) => {
     const authHeader = req.headers["authorization"];
     if (!authHeader || !authHeader.startsWith("Basic ")) {
-        return res.status(404);
+        return res.status(401).send("Unauthorized");
     }
     const base64Credentials = authHeader.split(" ")[1];
     const credentials = Buffer.from(base64Credentials, "base64").toString("utf-8");

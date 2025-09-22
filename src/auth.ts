@@ -9,7 +9,7 @@ export const basicAuth = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"];
 
   if (!authHeader || !authHeader.startsWith("Basic ")) {
-   return  res.status(404);
+   return  res.status(401).send("Unauthorized");
   }
 
   const base64Credentials: string = authHeader.split(" ")[1];
