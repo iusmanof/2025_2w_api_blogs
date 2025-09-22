@@ -6,6 +6,7 @@ import {BlogViewModel} from "../model_types/BlogViewModel";
 import {APIErrorResult} from "../model_types/APIErrorResult";
 import {basicAuth} from "../auth";
 import {BlogInputModel} from "../model_types/BlogInputModel";
+import {FieldError} from "../model_types/FieldError";
 
 export const BlogRouter = Router();
 
@@ -38,9 +39,15 @@ BlogRouter.post('/',basicAuth ,(req: RequestWithBody<BlogInputModel>, res: Respo
 })
 
 BlogRouter.put('/:id', basicAuth ,(req: Request, res: Response<BlogViewModel | {
-  errorsMessages: APIErrorResult[]
+  errorsMessages: FieldError[]
 }>) => {
   const blogId = blogsDB.findIndex(v => +v.id === +req.params.id)
+  const apiErrorMsg: FieldError[] = []
+
+  if (blogId === -1) {
+    apiErrorMsg.push({ message: "ID Not found", field: "id"})
+    res.status(HTTP_STATUS.NOT_FOUND_404).json({errorsMessages: apiErrorMsg});
+  }
 
   const updatedBlog: BlogViewModel = {
     ...blogsDB[blogId],
