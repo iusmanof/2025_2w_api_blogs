@@ -5,23 +5,22 @@ import {RequestWithBody, RequestWithParams} from "../model_types/RequestTypes";
 import {BlogViewModel} from "../model_types/BlogViewModel";
 import {APIErrorResult} from "../model_types/APIErrorResult";
 import {basicAuth} from "../auth";
+import {BlogInputModel} from "../model_types/BlogInputModel";
 
 export const BlogRouter = Router();
 
 BlogRouter.get("/", async (req: Request, res: Response) => {
   res.status(HTTP_STATUS.OK_200).send(blogsDB)
 })
-
 BlogRouter.get('/:id', (req: RequestWithParams<{ id: number }>, res: Response) => {
   const foundBlog: BlogViewModel | undefined = blogsDB.find(v => +v.id === +req.params.id)
 
   if (!foundBlog) {
-    res.status(HTTP_STATUS.NOT_FOUND_404).send("No video found.")
+    res.status(HTTP_STATUS.NOT_FOUND_404).send("No blogs found.")
   }
   res.status(200).json(foundBlog)
 })
-
-BlogRouter.post('/',basicAuth ,(req: RequestWithBody<BlogViewModel>, res: Response<BlogViewModel | {
+BlogRouter.post('/',basicAuth ,(req: RequestWithBody<BlogInputModel>, res: Response<BlogViewModel | {
   errorsMessages: APIErrorResult[]
 }>) => {
   const {name, description, websiteUrl} = req.body

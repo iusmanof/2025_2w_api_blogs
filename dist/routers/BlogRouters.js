@@ -21,7 +21,7 @@ exports.BlogRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, func
 exports.BlogRouter.get('/:id', (req, res) => {
     const foundBlog = blogsDB_1.blogsDB.find(v => +v.id === +req.params.id);
     if (!foundBlog) {
-        res.status(StatusCode_1.HTTP_STATUS.NOT_FOUND_404).send("No video found.");
+        res.status(StatusCode_1.HTTP_STATUS.NOT_FOUND_404).send("No blogs found.");
     }
     res.status(200).json(foundBlog);
 });
