@@ -14,7 +14,9 @@ const express_1 = require("express");
 const StatusCode_1 = require("../StatusCode");
 const blogsDB_1 = require("../DB/blogsDB");
 const auth_1 = require("../auth");
-const express_validator_1 = require("express-validator");
+const nameValidation_1 = require("../bodyValidation/nameValidation");
+const websiteValidation_1 = require("../bodyValidation/websiteValidation");
+const input_validation_middleware_1 = require("../middlewares/input-validation-middleware");
 exports.BlogRouter = (0, express_1.Router)();
 exports.BlogRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield res.status(StatusCode_1.HTTP_STATUS.OK_200).send(blogsDB_1.blogsDB);
@@ -27,21 +29,9 @@ exports.BlogRouter.get('/:id', (req, res) => {
     res.status(200).json(foundBlog);
 });
 exports.BlogRouter.post('/', auth_1.basicAuth, [
-    (0, express_validator_1.body)('name')
-        .trim()
-        .isString().withMessage('Name must be string')
-        .isLength({ min: 1, max: 15 }).withMessage('Name max length 15'),
-    (0, express_validator_1.body)('websiteUrl')
-        .isURL().withMessage('Website URL must be a valid URL'),
-], (req, res) => {
-    const errors = (0, express_validator_1.validationResult)(req);
-    if (!errors.isEmpty()) {
-        const errorsArray = errors.array().map(err => ({
-            message: err.msg,
-            field: err.path
-        }));
-        return res.status(400).json({ errorsMessages: errorsArray });
-    }
+    nameValidation_1.nameValidation,
+    websiteValidation_1.websiteValidation,
+], input_validation_middleware_1.inputValidationMiddleware, (req, res) => {
     const { name, description, websiteUrl } = req.body;
     const createdBlog = {
         id: Math.floor(Math.random() * 1000000).toString(),
@@ -50,9 +40,7 @@ exports.BlogRouter.post('/', auth_1.basicAuth, [
         websiteUrl: websiteUrl,
     };
     (0, blogsDB_1.addBlog)(createdBlog);
-    return res
-        .status(StatusCode_1.HTTP_STATUS.CREATED_201)
-        .json(createdBlog);
+    return res.status(StatusCode_1.HTTP_STATUS.CREATED_201).json(createdBlog);
 });
 exports.BlogRouter.put('/:id', auth_1.basicAuth, (req, res) => {
     const blogId = blogsDB_1.blogsDB.findIndex(v => +v.id === +req.params.id);

@@ -5,7 +5,9 @@ import {RequestWithParams} from "../model_types/RequestTypes";
 import {BlogViewModel} from "../model_types/BlogViewModel";
 import {basicAuth} from "../auth";
 import {FieldError} from "../model_types/FieldError";
-import {body, validationResult} from "express-validator";
+import {nameValidation} from "../bodyValidation/nameValidation";
+import {websiteValidation} from "../bodyValidation/websiteValidation";
+import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 
 export const BlogRouter = Router();
 
@@ -21,49 +23,34 @@ BlogRouter.get('/:id', (req: RequestWithParams<{ id: number }>, res: Response) =
   res.status(200).json(foundBlog)
 })
 
-BlogRouter.post(
-  '/',
-  basicAuth,
+BlogRouter.post('/', basicAuth,
   [
-    body('name')
-      .trim()
-      .isString().withMessage('Name must be string')
-      .isLength({ min:1, max: 15}).withMessage('Name max length 15'),
-    body('websiteUrl')
-      .isURL().withMessage('Website URL must be a valid URL'),
+    nameValidation,
+    websiteValidation,
   ],
+  inputValidationMiddleware,
   (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const errorsArray = errors.array().map(err => ({
-        message: err.msg,
-        field: err.path
-      }));
-
-      return res.status(400).json({ errorsMessages: errorsArray });
-    }
-    const {name, description, websiteUrl} = req.body
-
-  const createdBlog: BlogViewModel = {
-    id: Math.floor(Math.random() * 1000000).toString(),
-    name: name!,
-    description: description!,
-    websiteUrl: websiteUrl,
+    const {name, description, websiteUrl} = req.body;
+    const createdBlog: BlogViewModel = {
+      id: Math.floor(Math.random() * 1000000).toString(),
+      name: name!,
+      description: description!,
+      websiteUrl: websiteUrl,
+    };
+    addBlog(createdBlog);
+    return res.status(HTTP_STATUS.CREATED_201).json(createdBlog);
   }
-  addBlog(createdBlog)
-  return res
-    .status(HTTP_STATUS.CREATED_201)
-    .json(createdBlog)
-})
+);
 
-BlogRouter.put('/:id', basicAuth ,(req: Request, res: Response<BlogViewModel | {
+
+BlogRouter.put('/:id', basicAuth, (req: Request, res: Response<BlogViewModel | {
   errorsMessages: FieldError[]
 }>) => {
   const blogId = blogsDB.findIndex(v => +v.id === +req.params.id)
   const apiErrorMsg: FieldError[] = []
 
   if (blogId === -1) {
-    apiErrorMsg.push({ message: "ID Not found", field: "id"})
+    apiErrorMsg.push({message: "ID Not found", field: "id"})
     return res.status(HTTP_STATUS.NOT_FOUND_404).json({errorsMessages: apiErrorMsg});
   }
 
