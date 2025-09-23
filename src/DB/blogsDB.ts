@@ -21,3 +21,8 @@ export function updateBlog(blog: BlogViewModel, blogId: number) {
 export function deleteBlog(blogId: string) {
   blogsDB = blogsDB.filter(v => v.id !== blogId)
 }
+
+export function getBlogNameById(blogId: string): string {
+  const blog = blogsDB.find(b => b.id === blogId);
+  return blog ? blog.name : "";
+}

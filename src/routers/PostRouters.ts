@@ -6,9 +6,7 @@ import {PostViewModel} from "../model_types/PostViewModel";
 import {basicAuth} from "../auth";
 import {APIErrorResult} from "../model_types/APIErrorResult";
 import {FieldError} from "../model_types/FieldError";
-import {deleteBlog} from "../DB/blogsDB";
-import {PostInputModel} from "../model_types/PostInputModel";
-import {PostCreatedModel} from "../model_types/PostCreatedModel";
+import {deleteBlog, getBlogNameById} from "../DB/blogsDB";
 
 export const PostRouter = Router();
 
@@ -23,14 +21,18 @@ PostRouter.get('/:id', (req: RequestWithParams<{ id: string }>, res: Response) =
   }
   res.status(200).json(foundPost)
 })
-PostRouter.post('/',basicAuth ,(req: RequestWithBody<PostInputModel>, res: Response<PostViewModel | { errorsMessages: APIErrorResult[] }>) => {
+
+PostRouter.post('/', basicAuth, (req: RequestWithBody<PostViewModel>, res: Response<PostViewModel | {
+  errorsMessages: APIErrorResult[]
+}>) => {
   const {title, shortDescription, content, blogId} = req.body
-  const createdPost: PostCreatedModel = {
+  const createdPost: PostViewModel = {
     id: Math.floor(Math.random() * 1000000).toString(),
     title: title!,
     shortDescription: shortDescription!,
     content: content,
     blogId: blogId,
+    blogName: getBlogNameById(blogId)
   }
   addPost(createdPost)
   res
@@ -39,13 +41,13 @@ PostRouter.post('/',basicAuth ,(req: RequestWithBody<PostInputModel>, res: Respo
 })
 
 
-PostRouter.put('/:id', basicAuth ,(req: Request, res: Response<PostViewModel | {
+PostRouter.put('/:id', basicAuth, (req: Request, res: Response<PostViewModel | {
   errorsMessages: FieldError[]
 }>) => {
   const postId = postsDB.findIndex(v => +v.id === +req.params.id)
   const apiErrorMsg: FieldError[] = []
   if (postId === -1) {
-    apiErrorMsg.push({ message: "ID Not found", field: "id"})
+    apiErrorMsg.push({message: "ID Not found", field: "id"})
     return res.status(HTTP_STATUS.NOT_FOUND_404).json({errorsMessages: apiErrorMsg});
   }
   const updatedPost: PostViewModel = {

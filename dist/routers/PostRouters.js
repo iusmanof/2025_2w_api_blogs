@@ -25,6 +25,7 @@ exports.PostRouter.post('/', auth_1.basicAuth, (req, res) => {
         shortDescription: shortDescription,
         content: content,
         blogId: blogId,
+        blogName: (0, blogsDB_1.getBlogNameById)(blogId)
     };
     (0, postsDB_1.addPost)(createdPost);
     res

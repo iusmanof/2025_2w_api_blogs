@@ -5,6 +5,7 @@ exports.deleteAllBlogs = deleteAllBlogs;
 exports.addBlog = addBlog;
 exports.updateBlog = updateBlog;
 exports.deleteBlog = deleteBlog;
+exports.getBlogNameById = getBlogNameById;
 exports.blogsDB = [];
 function deleteAllBlogs() {
     exports.blogsDB = [];
@@ -21,4 +22,8 @@ function updateBlog(blog, blogId) {
 }
 function deleteBlog(blogId) {
     exports.blogsDB = exports.blogsDB.filter(v => v.id !== blogId);
+}
+function getBlogNameById(blogId) {
+    const blog = exports.blogsDB.find(b => b.id === blogId);
+    return blog ? blog.name : "";
 }
