@@ -36,18 +36,8 @@ exports.BlogRouter.post('/', auth_1.basicAuth, [
 ], (req, res) => {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
-        const errorsMessages = errors.array().map(err => ({
-            message: err.msg,
-            field: err.path, // заменяем param на path
-        }));
-        return res.status(400).json({ errorsMessages });
+        return res.status(400).json({ errorsMessages: errors.array() });
     }
-    // return res.status(400).json({
-    //   errorsMessages: errors.array().map(err => ({
-    //     message: err.msg,
-    //     field: err.path,  // вот здесь должно быть правильное поле, например "name" или "websiteUrl"
-    //   })),
-    // });
     const { name, description, websiteUrl } = req.body;
     const createdBlog = {
         id: Math.floor(Math.random() * 1000000).toString(),

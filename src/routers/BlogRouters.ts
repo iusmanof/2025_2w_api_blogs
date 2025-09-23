@@ -5,7 +5,7 @@ import {RequestWithParams} from "../model_types/RequestTypes";
 import {BlogViewModel} from "../model_types/BlogViewModel";
 import {basicAuth} from "../auth";
 import {FieldError} from "../model_types/FieldError";
-import {body, ValidationError, validationResult} from "express-validator";
+import {body, validationResult} from "express-validator";
 
 export const BlogRouter = Router();
 
@@ -35,20 +35,8 @@ BlogRouter.post(
   (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const errorsMessages = errors.array().map(err => ({
-        message: err.msg,
-        field: err.path,  // заменяем param на path
-      }));
-
-      return res.status(400).json({ errorsMessages });
+      return res.status(400).json({ errorsMessages: errors.array() });
     }
-      // return res.status(400).json({
-      //   errorsMessages: errors.array().map(err => ({
-      //     message: err.msg,
-      //     field: err.path,  // вот здесь должно быть правильное поле, например "name" или "websiteUrl"
-      //   })),
-      // });
-
     const {name, description, websiteUrl} = req.body
 
   const createdBlog: BlogViewModel = {
