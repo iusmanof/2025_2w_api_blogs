@@ -1,6 +1,4 @@
 import {PostViewModel} from "../model_types/PostViewModel";
-import {BlogViewModel} from "../model_types/BlogViewModel";
-import {blogsDB} from "./blogsDB";
 
 export let postsDB: PostViewModel[] = []
 

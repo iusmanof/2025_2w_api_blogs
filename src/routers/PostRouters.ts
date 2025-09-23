@@ -5,7 +5,6 @@ import {RequestWithBody, RequestWithParams} from "../model_types/RequestTypes";
 import {PostViewModel} from "../model_types/PostViewModel";
 import {basicAuth} from "../auth";
 import {APIErrorResult} from "../model_types/APIErrorResult";
-import {BlogViewModel} from "../model_types/BlogViewModel";
 import {FieldError} from "../model_types/FieldError";
 import {deleteBlog} from "../DB/blogsDB";
 
