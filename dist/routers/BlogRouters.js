@@ -34,7 +34,7 @@ exports.BlogRouter.post('/', auth_1.basicAuth, [
 ], (req, res) => {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
-        const errorsArray = errors.array({ onlyFirstError: true }).map(err => ({
+        const errorsArray = errors.array().map(err => ({
             message: err.msg,
             field: err.path
         }));

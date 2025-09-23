@@ -33,7 +33,7 @@ BlogRouter.post(
   (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const errorsArray = errors.array({ onlyFirstError: true }).map(err => ({
+      const errorsArray = errors.array().map(err => ({
         message: err.msg,
         field: err.path
       }));
