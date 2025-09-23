@@ -7,7 +7,6 @@ const PASSWORD = "qwerty"
 
 export const basicAuth = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"];
-  console.log(req.headers.authorization);
   if (!authHeader || !authHeader.startsWith("Basic ")) {
    return res.status(401).send("Unauthorized");
   }

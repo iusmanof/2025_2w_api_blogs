@@ -5,7 +5,7 @@ import {RequestWithParams} from "../model_types/RequestTypes";
 import {BlogViewModel} from "../model_types/BlogViewModel";
 import {basicAuth} from "../auth";
 import {FieldError} from "../model_types/FieldError";
-import {body, validationResult} from "express-validator";
+import {body, ValidationError, validationResult} from "express-validator";
 
 export const BlogRouter = Router();
 
@@ -26,25 +26,28 @@ BlogRouter.post(
   basicAuth,
   [
     body('name')
-      .exists()
-      .isString()
-      .isLength({ min: 1, max: 15 }).withMessage("name length must be 1-15 characters"),
-
+      .exists().withMessage('Name is required')
+      .isString().withMessage('Name must be a string'),
     body('websiteUrl')
-      .exists()
-      .isString()
-      .isURL().withMessage("websiteUrl must be a valid URL"),
+      .exists().withMessage('Website URL is required')
+      .isURL().withMessage('Website URL must be a valid URL'),
   ],
-  (req: any, res: any) => {
+  (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errorsMessages: errors.array().map(err => ({
-          message: err.msg,
-          field: err.msg.body.name,  // вот здесь должно быть правильное поле, например "name" или "websiteUrl"
-        })),
-      });
+      const errorsMessages = errors.array().map(err => ({
+        message: err.msg,
+        field: err.path,  // заменяем param на path
+      }));
+
+      return res.status(400).json({ errorsMessages });
     }
+      // return res.status(400).json({
+      //   errorsMessages: errors.array().map(err => ({
+      //     message: err.msg,
+      //     field: err.path,  // вот здесь должно быть правильное поле, например "name" или "websiteUrl"
+      //   })),
+      // });
 
     const {name, description, websiteUrl} = req.body
 

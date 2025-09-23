@@ -28,23 +28,26 @@ exports.BlogRouter.get('/:id', (req, res) => {
 });
 exports.BlogRouter.post('/', auth_1.basicAuth, [
     (0, express_validator_1.body)('name')
-        .exists()
-        .isString()
-        .isLength({ min: 1, max: 15 }).withMessage("name length must be 1-15 characters"),
+        .exists().withMessage('Name is required')
+        .isString().withMessage('Name must be a string'),
     (0, express_validator_1.body)('websiteUrl')
-        .exists()
-        .isString()
-        .isURL().withMessage("websiteUrl must be a valid URL"),
+        .exists().withMessage('Website URL is required')
+        .isURL().withMessage('Website URL must be a valid URL'),
 ], (req, res) => {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({
-            errorsMessages: errors.array().map(err => ({
-                message: err.msg,
-                field: err.msg.body.name, // вот здесь должно быть правильное поле, например "name" или "websiteUrl"
-            })),
-        });
+        const errorsMessages = errors.array().map(err => ({
+            message: err.msg,
+            field: err.path, // заменяем param на path
+        }));
+        return res.status(400).json({ errorsMessages });
     }
+    // return res.status(400).json({
+    //   errorsMessages: errors.array().map(err => ({
+    //     message: err.msg,
+    //     field: err.path,  // вот здесь должно быть правильное поле, например "name" или "websiteUrl"
+    //   })),
+    // });
     const { name, description, websiteUrl } = req.body;
     const createdBlog = {
         id: Math.floor(Math.random() * 1000000).toString(),
