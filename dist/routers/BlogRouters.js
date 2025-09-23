@@ -34,7 +34,11 @@ exports.BlogRouter.post('/', auth_1.basicAuth, [
 ], (req, res) => {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errorsMessages: errors.array() });
+        const errorsArray = errors.array({ onlyFirstError: true }).map(err => ({
+            message: err.msg,
+            field: err.path
+        }));
+        return res.status(400).json({ errorsMessages: errorsArray });
     }
     const { name, description, websiteUrl } = req.body;
     const createdBlog = {

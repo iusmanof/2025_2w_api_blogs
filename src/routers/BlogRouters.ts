@@ -33,7 +33,12 @@ BlogRouter.post(
   (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errorsMessages: errors.array() });
+      const errorsArray = errors.array({ onlyFirstError: true }).map(err => ({
+        message: err.msg,
+        field: err.path
+      }));
+
+      return res.status(400).json({ errorsMessages: errorsArray });
     }
     const {name, description, websiteUrl} = req.body
 
