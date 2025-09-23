@@ -1,10 +1,9 @@
 import {Router, Request, Response} from "express";
 import {HTTP_STATUS} from "../StatusCode";
 import {addBlog, blogsDB, deleteBlog, updateBlog} from "../DB/blogsDB";
-import {RequestWithBody, RequestWithParams} from "../model_types/RequestTypes";
+import {RequestWithParams} from "../model_types/RequestTypes";
 import {BlogViewModel} from "../model_types/BlogViewModel";
 import {basicAuth} from "../auth";
-import {BlogInputModel} from "../model_types/BlogInputModel";
 import {FieldError} from "../model_types/FieldError";
 import {body, validationResult} from "express-validator";
 
@@ -42,7 +41,7 @@ BlogRouter.post(
       return res.status(400).json({
         errorsMessages: errors.array().map(err => ({
           message: err.msg,
-          field: err.msg.field,  // вот здесь должно быть правильное поле, например "name" или "websiteUrl"
+          field: err.msg.body.name,  // вот здесь должно быть правильное поле, например "name" или "websiteUrl"
         })),
       });
     }

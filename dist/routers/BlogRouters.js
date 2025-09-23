@@ -41,7 +41,7 @@ exports.BlogRouter.post('/', auth_1.basicAuth, [
         return res.status(400).json({
             errorsMessages: errors.array().map(err => ({
                 message: err.msg,
-                field: err.msg.field, // вот здесь должно быть правильное поле, например "name" или "websiteUrl"
+                field: err.msg.body.name, // вот здесь должно быть правильное поле, например "name" или "websiteUrl"
             })),
         });
     }
