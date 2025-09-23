@@ -28,9 +28,10 @@ exports.BlogRouter.get('/:id', (req, res) => {
 });
 exports.BlogRouter.post('/', auth_1.basicAuth, [
     (0, express_validator_1.body)('name')
-        .exists().isString().withMessage('Name must be a valid name'),
+        .isString().withMessage('Name must be string')
+        .isLength({ max: 15 }).withMessage('Name max length 15'),
     (0, express_validator_1.body)('websiteUrl')
-        .exists().isURL().withMessage('Website URL must be a valid URL'),
+        .isURL().withMessage('Website URL must be a valid URL'),
 ], (req, res) => {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {

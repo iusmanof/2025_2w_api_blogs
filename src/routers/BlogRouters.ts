@@ -26,9 +26,10 @@ BlogRouter.post(
   basicAuth,
   [
     body('name')
-      .exists().isString().withMessage('Name must be a valid name'),
+      .isString().withMessage('Name must be string')
+      .isLength({ max: 15}).withMessage('Name max length 15'),
     body('websiteUrl')
-      .exists().isURL().withMessage('Website URL must be a valid URL'),
+      .isURL().withMessage('Website URL must be a valid URL'),
   ],
   (req: Request, res: Response) => {
     const errors = validationResult(req);
