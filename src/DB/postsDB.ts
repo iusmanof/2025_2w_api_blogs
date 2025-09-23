@@ -1,4 +1,6 @@
 import {PostViewModel} from "../model_types/PostViewModel";
+import {BlogViewModel} from "../model_types/BlogViewModel";
+import {blogsDB} from "./blogsDB";
 
 export let postsDB: PostViewModel[] = []
 
@@ -9,3 +11,16 @@ export function deleteAllPosts() {
 export function addPost(post: PostViewModel) {
   postsDB = [...postsDB, post]
 }
+
+export function updatePost(blog: PostViewModel, postId: number) {
+  postsDB = [
+    ...postsDB.slice(0, postId),
+    blog,
+    ...postsDB.slice(postId + 1)
+  ]
+}
+
+export function deletePost(postId: string) {
+  postsDB = postsDB.filter(v => v.id !== postId)
+}
+
