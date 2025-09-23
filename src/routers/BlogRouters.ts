@@ -43,7 +43,12 @@ BlogRouter.post('/', basicAuth,
 );
 
 
-BlogRouter.put('/:id', basicAuth, (req: Request, res: Response<BlogViewModel | {
+BlogRouter.put('/:id', basicAuth,  [
+    nameValidation,
+    websiteValidation,
+  ],
+  inputValidationMiddleware,
+  (req: Request, res: Response<BlogViewModel | {
   errorsMessages: FieldError[]
 }>) => {
   const blogId = blogsDB.findIndex(v => +v.id === +req.params.id)

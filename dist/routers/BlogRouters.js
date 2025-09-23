@@ -42,7 +42,10 @@ exports.BlogRouter.post('/', auth_1.basicAuth, [
     (0, blogsDB_1.addBlog)(createdBlog);
     return res.status(StatusCode_1.HTTP_STATUS.CREATED_201).json(createdBlog);
 });
-exports.BlogRouter.put('/:id', auth_1.basicAuth, (req, res) => {
+exports.BlogRouter.put('/:id', auth_1.basicAuth, [
+    nameValidation_1.nameValidation,
+    websiteValidation_1.websiteValidation,
+], input_validation_middleware_1.inputValidationMiddleware, (req, res) => {
     const blogId = blogsDB_1.blogsDB.findIndex(v => +v.id === +req.params.id);
     const apiErrorMsg = [];
     if (blogId === -1) {
