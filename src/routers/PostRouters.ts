@@ -23,7 +23,6 @@ PostRouter.get('/:id', (req: RequestWithParams<{ id: string }>, res: Response) =
 })
 PostRouter.post('/',basicAuth ,(req: RequestWithBody<PostViewModel>, res: Response<PostViewModel | { errorsMessages: APIErrorResult[] }>) => {
   const {title, shortDescription, content, blogId, blogName} = req.body
-
   const createdPost: PostViewModel = {
     id: Math.floor(Math.random() * 1000000).toString(),
     title: title!,
@@ -44,12 +43,10 @@ PostRouter.put('/:id', basicAuth ,(req: Request, res: Response<PostViewModel | {
 }>) => {
   const postId = postsDB.findIndex(v => +v.id === +req.params.id)
   const apiErrorMsg: FieldError[] = []
-
   if (postId === -1) {
     apiErrorMsg.push({ message: "ID Not found", field: "id"})
     return res.status(HTTP_STATUS.NOT_FOUND_404).json({errorsMessages: apiErrorMsg});
   }
-
   const updatedPost: PostViewModel = {
     ...postsDB[postId],
     title: req.body.title,
@@ -62,13 +59,11 @@ PostRouter.put('/:id', basicAuth ,(req: Request, res: Response<PostViewModel | {
   updatePost(updatedPost, postId)
   return res.status(HTTP_STATUS.NO_CONTENT_204).send()
 })
-
 PostRouter.delete('/:id', basicAuth, (req: RequestWithParams<{ id: string }>, res: Response) => {
   const postId = postsDB.findIndex(v => v.id === req.params.id)
   if (postId === -1) {
     res.status(HTTP_STATUS.NOT_FOUND_404).send("Not found")
   }
-
   deleteBlog(req.params.id)
   res.status(HTTP_STATUS.NO_CONTENT_204).send()
 })
