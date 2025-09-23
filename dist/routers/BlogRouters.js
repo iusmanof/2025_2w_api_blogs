@@ -29,6 +29,7 @@ exports.BlogRouter.get('/:id', (req, res) => {
 exports.BlogRouter.post('/', auth_1.basicAuth, [
     (0, express_validator_1.body)('name')
         .isString().withMessage('Name must be string')
+        .trim()
         .isLength({ max: 15 }).withMessage('Name max length 15'),
     (0, express_validator_1.body)('websiteUrl')
         .isURL().withMessage('Website URL must be a valid URL'),
