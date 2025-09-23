@@ -7,6 +7,8 @@ import {basicAuth} from "../auth";
 import {APIErrorResult} from "../model_types/APIErrorResult";
 import {FieldError} from "../model_types/FieldError";
 import {deleteBlog} from "../DB/blogsDB";
+import {PostInputModel} from "../model_types/PostInputModel";
+import {PostCreatedModel} from "../model_types/PostCreatedModel";
 
 export const PostRouter = Router();
 
@@ -21,15 +23,14 @@ PostRouter.get('/:id', (req: RequestWithParams<{ id: string }>, res: Response) =
   }
   res.status(200).json(foundPost)
 })
-PostRouter.post('/',basicAuth ,(req: RequestWithBody<PostViewModel>, res: Response<PostViewModel | { errorsMessages: APIErrorResult[] }>) => {
-  const {title, shortDescription, content, blogId, blogName} = req.body
-  const createdPost: PostViewModel = {
+PostRouter.post('/',basicAuth ,(req: RequestWithBody<PostInputModel>, res: Response<PostViewModel | { errorsMessages: APIErrorResult[] }>) => {
+  const {title, shortDescription, content, blogId} = req.body
+  const createdPost: PostCreatedModel = {
     id: Math.floor(Math.random() * 1000000).toString(),
     title: title!,
     shortDescription: shortDescription!,
     content: content,
     blogId: blogId,
-    blogName: blogName
   }
   addPost(createdPost)
   res

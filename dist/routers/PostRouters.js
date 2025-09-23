@@ -18,14 +18,13 @@ exports.PostRouter.get('/:id', (req, res) => {
     res.status(200).json(foundPost);
 });
 exports.PostRouter.post('/', auth_1.basicAuth, (req, res) => {
-    const { title, shortDescription, content, blogId, blogName } = req.body;
+    const { title, shortDescription, content, blogId } = req.body;
     const createdPost = {
         id: Math.floor(Math.random() * 1000000).toString(),
         title: title,
         shortDescription: shortDescription,
         content: content,
         blogId: blogId,
-        blogName: blogName
     };
     (0, postsDB_1.addPost)(createdPost);
     res

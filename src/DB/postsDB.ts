@@ -1,11 +1,12 @@
 import {PostViewModel} from "../model_types/PostViewModel";
+import {PostCreatedModel} from "../model_types/PostCreatedModel";
 
-export let postsDB: PostViewModel[] = []
+export let postsDB: PostViewModel[] | PostCreatedModel[] = []
 
 export function deleteAllPosts() {
   postsDB = [];
 }
-export function addPost(post: PostViewModel) {
+export function addPost(post: PostCreatedModel) {
   postsDB = [...postsDB, post]
 }
 export function updatePost(blog: PostViewModel, postId: number) {
