@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const BlogRouters_1 = require("./routers/BlogRouters");
 const PostRouters_1 = require("./routers/PostRouters");
-const blogsDB_1 = require("./DB/blogsDB");
-const postsDB_1 = require("./DB/postsDB");
+const blog_data_access_layer_1 = require("./dataAccessLayer/blog-data-access-layer");
+const post_data_access_layer_1 = require("./dataAccessLayer/post-data-access-layer");
 const app = (0, express_1.default)();
 const port = process.env.port || 3000;
 app.use(express_1.default.json());
@@ -17,8 +17,8 @@ app.get('/', (req, res) => {
     res.send('blogs api');
 });
 app.delete('/testing/all-data', (req, res) => {
-    (0, blogsDB_1.deleteAllBlogs)();
-    (0, postsDB_1.deleteAllPosts)();
+    blog_data_access_layer_1.blogDataAccessLayer.deleteAllBlogs();
+    post_data_access_layer_1.postAccessLayer.deleteAllPosts();
     res.status(204).send("All data is deleted");
 });
 app.listen(port, () => {

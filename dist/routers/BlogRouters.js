@@ -43,8 +43,8 @@ exports.BlogRouter.post('/', auth_1.basicAuth, [
     //   websiteUrl: websiteUrl,
     // };
     // addBlog(createdBlog);
-    const createdBlog = blog_data_access_layer_1.blogDataAccessLayer.createBlog(req.body);
-    return res.status(StatusCode_1.HTTP_STATUS.CREATED_201).json(createdBlog);
+    const blogCreated = blog_data_access_layer_1.blogDataAccessLayer.createBlog(req.body);
+    return res.status(StatusCode_1.HTTP_STATUS.CREATED_201).json(blogCreated);
 });
 exports.BlogRouter.put('/:id', auth_1.basicAuth, [
     nameValidation_1.nameValidation,

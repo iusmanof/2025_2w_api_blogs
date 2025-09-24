@@ -40,8 +40,8 @@ BlogRouter.post('/', basicAuth,
     //   websiteUrl: websiteUrl,
     // };
     // addBlog(createdBlog);
-    const createdBlog= blogDataAccessLayer.createBlog(req.body)
-    return res.status(HTTP_STATUS.CREATED_201).json(createdBlog);
+    const blogCreated= blogDataAccessLayer.createBlog(req.body)
+    return res.status(HTTP_STATUS.CREATED_201).json(blogCreated);
   }
 );
 

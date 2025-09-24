@@ -45,5 +45,8 @@ exports.blogDataAccessLayer = {
             blogsDB = blogsDB.filter(v => v.id !== id);
             return true;
         }
+    },
+    deleteAllBlogs() {
+        blogsDB = [];
     }
 };

@@ -1,29 +1,29 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.blogsDB = void 0;
-exports.deleteAllBlogs = deleteAllBlogs;
-exports.addBlog = addBlog;
-exports.updateBlog = updateBlog;
-exports.deleteBlog = deleteBlog;
-exports.getBlogNameById = getBlogNameById;
-exports.blogsDB = [];
-function deleteAllBlogs() {
-    exports.blogsDB = [];
-}
-function addBlog(blog) {
-    exports.blogsDB = [...exports.blogsDB, blog];
-}
-function updateBlog(blog, blogId) {
-    exports.blogsDB = [
-        ...exports.blogsDB.slice(0, blogId),
-        blog,
-        ...exports.blogsDB.slice(blogId + 1)
-    ];
-}
-function deleteBlog(blogId) {
-    exports.blogsDB = exports.blogsDB.filter(v => v.id !== blogId);
-}
-function getBlogNameById(blogId) {
-    const blog = exports.blogsDB.find(b => b.id === blogId);
-    return blog ? blog.name : "";
-}
+// import {BlogViewModel} from "../model_types/BlogViewModel";
+//
+// export let blogsDB: BlogViewModel[] = []
+//
+// // export function deleteAllBlogs (){
+// //   blogsDB = []
+// // }
+//
+// // export function addBlog(blog: BlogViewModel) {
+// //   blogsDB = [...blogsDB, blog]
+// // }
+// //
+// // export function updateBlog(blog: BlogViewModel, blogId: number) {
+// //   blogsDB = [
+// //     ...blogsDB.slice(0, blogId),
+// //     blog,
+// //     ...blogsDB.slice(blogId + 1)
+// //   ]
+// // }
+//
+// export function deleteBlog(blogId: string) {
+//   blogsDB = blogsDB.filter(v => v.id !== blogId)
+// }
+//
+// export function getBlogNameById(blogId: string): string {
+//   const blog = blogsDB.find(b => b.id === blogId);
+//   return blog ? blog.name : "";
+// }
