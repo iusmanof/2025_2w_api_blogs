@@ -5,16 +5,16 @@ import {blogDataAccessLayer} from "./blog-data-access-layer";
 let postsDB: PostViewModel[]  = []
 
 export const postAccessLayer = {
-  getAllPosts: async () => {
+  getAllPosts:  () => {
     return postsDB;
   },
-  getPostById: async (id: string) => {
+  getPostById:  (id: string) => {
     let postFounded: PostViewModel | undefined;
     postFounded = postsDB.find(post => post.id === id)
     return postFounded
   },
-  createPost: async (post: PostViewModel) => {
-    const blog = blogDataAccessLayer.getBlogById(post.id);
+  createPost:  (post: PostViewModel) => {
+    const blog = blogDataAccessLayer.getBlogById(post.blogId);
     const postCreated: PostViewModel = {
       id: Math.floor(Math.random()*1000000).toString(),
       title: post.title,
@@ -23,10 +23,10 @@ export const postAccessLayer = {
       blogId: post.blogId,
       blogName: blog ? blog.name : "Unknown"
     }
-    postsDB = [...postsDB, post]
+    postsDB = [...postsDB, postCreated]
     return postCreated
   },
-  deletePost: async (id: string) => {
+  deletePost:  (id: string) => {
     const postID = postsDB.findIndex(p => p.id === id)
 
     if (postID !== -1) {
@@ -36,7 +36,7 @@ export const postAccessLayer = {
       return true
     }
   },
-  updatePost: async (id: string, post: PostViewModel) => {
+  updatePost:  (id: string, post: PostViewModel) => {
     const postID =postsDB.findIndex(p => p.id === id)
 
     if (postID !== -1) {
@@ -61,7 +61,7 @@ export const postAccessLayer = {
     }
 
   },
-  deleteAllPosts: async () => {
+  deleteAllPosts:  () => {
     postsDB = [];
   },
 }

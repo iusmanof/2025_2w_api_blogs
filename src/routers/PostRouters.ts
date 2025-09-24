@@ -40,7 +40,7 @@ PostRouter.post('/', basicAuth, async (req: RequestWithBody<PostViewModel>, res:
   // res
   //   .status(HTTP_STATUS.CREATED_201)
   //   .json(createdPost)
-  const postCreated = await postAccessLayer.createPost(req.body)
+  const postCreated = postAccessLayer.createPost(req.body)
   res.status(HTTP_STATUS.CREATED_201).json(postCreated)
 })
 

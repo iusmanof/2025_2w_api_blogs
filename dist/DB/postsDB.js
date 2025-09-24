@@ -1,24 +1,22 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.postsDB = void 0;
-exports.deleteAllPosts = deleteAllPosts;
-exports.addPost = addPost;
-exports.updatePost = updatePost;
-exports.deletePost = deletePost;
-exports.postsDB = [];
-function deleteAllPosts() {
-    exports.postsDB = [];
-}
-function addPost(post) {
-    exports.postsDB = [...exports.postsDB, post];
-}
-function updatePost(blog, postId) {
-    exports.postsDB = [
-        ...exports.postsDB.slice(0, postId),
-        blog,
-        ...exports.postsDB.slice(postId + 1)
-    ];
-}
-function deletePost(postId) {
-    exports.postsDB = exports.postsDB.filter(v => v.id !== postId);
-}
+// import {PostViewModel} from "../model_types/PostViewModel";
+//
+// export let postsDB: PostViewModel[]  = []
+//
+// export function deleteAllPosts() {
+//   postsDB = [];
+// }
+// export function addPost(post: PostViewModel) {
+//   postsDB = [...postsDB, post]
+// }
+// export function updatePost(blog: PostViewModel, postId: number) {
+//   postsDB = [
+//     ...postsDB.slice(0, postId),
+//     blog,
+//     ...postsDB.slice(postId + 1)
+//   ]
+// }
+// export function deletePost(postId: string) {
+//   postsDB = postsDB.filter(v => v.id !== postId)
+// }
+//
