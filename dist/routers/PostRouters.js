@@ -44,7 +44,7 @@ exports.PostRouter.post('/', auth_1.basicAuth, (req, res) => __awaiter(void 0, v
     // res
     //   .status(HTTP_STATUS.CREATED_201)
     //   .json(createdPost)
-    const postCreated = yield post_data_access_layer_1.postAccessLayer.createPost(req.body);
+    const postCreated = post_data_access_layer_1.postAccessLayer.createPost(req.body);
     res.status(StatusCode_1.HTTP_STATUS.CREATED_201).json(postCreated);
 }));
 exports.PostRouter.put('/:id', auth_1.basicAuth, (req, res) => {

@@ -29,7 +29,7 @@ export const postAccessLayer = {
   deletePost:  (id: string) => {
     const postID = postsDB.findIndex(p => p.id === id)
 
-    if (postID !== -1) {
+    if (postID === -1) {
       return false
     } else {
       postsDB.splice(postID, 1);
@@ -39,10 +39,10 @@ export const postAccessLayer = {
   updatePost:  (id: string, post: PostViewModel) => {
     const postID =postsDB.findIndex(p => p.id === id)
 
-    if (postID !== -1) {
+    if (postID === -1) {
       return false
     } else{
-      const blog = blogDataAccessLayer.getBlogById(post.id)
+      const blog = blogDataAccessLayer.getBlogById(post.blogId)
       const postUpdated: PostViewModel = {
         ...postsDB[postID],
         title: post.title,

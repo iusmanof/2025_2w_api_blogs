@@ -27,7 +27,7 @@ exports.postAccessLayer = {
     },
     deletePost: (id) => {
         const postID = postsDB.findIndex(p => p.id === id);
-        if (postID !== -1) {
+        if (postID === -1) {
             return false;
         }
         else {
@@ -37,11 +37,11 @@ exports.postAccessLayer = {
     },
     updatePost: (id, post) => {
         const postID = postsDB.findIndex(p => p.id === id);
-        if (postID !== -1) {
+        if (postID === -1) {
             return false;
         }
         else {
-            const blog = blog_data_access_layer_1.blogDataAccessLayer.getBlogById(post.id);
+            const blog = blog_data_access_layer_1.blogDataAccessLayer.getBlogById(post.blogId);
             const postUpdated = Object.assign(Object.assign({}, postsDB[postID]), { title: post.title, shortDescription: post.shortDescription, content: post.content, blogId: post.blogId, blogName: blog ? blog.name : "Unknown" });
             postsDB = [
                 ...postsDB.slice(0, postID),
