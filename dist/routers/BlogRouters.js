@@ -12,55 +12,76 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlogRouter = void 0;
 const express_1 = require("express");
 const StatusCode_1 = require("../StatusCode");
-const blogsDB_1 = require("../DB/blogsDB");
 const auth_1 = require("../auth");
 const nameValidation_1 = require("../bodyValidation/nameValidation");
 const websiteValidation_1 = require("../bodyValidation/websiteValidation");
 const input_validation_middleware_1 = require("../middlewares/input-validation-middleware");
+const blog_data_access_layer_1 = require("../dataAccessLayer/blog-data-access-layer");
 exports.BlogRouter = (0, express_1.Router)();
 exports.BlogRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield res.status(StatusCode_1.HTTP_STATUS.OK_200).send(blogsDB_1.blogsDB);
+    yield res.status(StatusCode_1.HTTP_STATUS.OK_200).send(blog_data_access_layer_1.blogDataAccessLayer.getAllBlogs());
 }));
 exports.BlogRouter.get('/:id', (req, res) => {
-    const foundBlog = blogsDB_1.blogsDB.find(v => +v.id === +req.params.id);
-    if (!foundBlog) {
-        res.status(StatusCode_1.HTTP_STATUS.NOT_FOUND_404).send("No blogs found.");
-    }
-    res.status(200).json(foundBlog);
+    // const foundBlog: BlogViewModel | undefined = blogsDB.find(v => +v.id === +req.params.id)
+    // if (!foundBlog) {
+    //   res.status(HTTP_STATUS.NOT_FOUND_404).send("No blogs found.")
+    // }
+    const blogFounded = blog_data_access_layer_1.blogDataAccessLayer.getBlogById(req.params.id);
+    if (!blogFounded)
+        res.status(StatusCode_1.HTTP_STATUS.NOT_FOUND_404).send("Blog not found.");
+    res.status(200).json(blogFounded);
 });
 exports.BlogRouter.post('/', auth_1.basicAuth, [
     nameValidation_1.nameValidation,
     websiteValidation_1.websiteValidation,
 ], input_validation_middleware_1.inputValidationMiddleware, (req, res) => {
-    const { name, description, websiteUrl } = req.body;
-    const createdBlog = {
-        id: Math.floor(Math.random() * 1000000).toString(),
-        name: name,
-        description: description,
-        websiteUrl: websiteUrl,
-    };
-    (0, blogsDB_1.addBlog)(createdBlog);
+    // const {name, description, websiteUrl} = req.body;
+    // const createdBlog: BlogViewModel = {
+    //   id: Math.floor(Math.random() * 1000000).toString(),
+    //   name: name!,
+    //   description: description!,
+    //   websiteUrl: websiteUrl,
+    // };
+    // addBlog(createdBlog);
+    const createdBlog = blog_data_access_layer_1.blogDataAccessLayer.createBlog(req.body);
     return res.status(StatusCode_1.HTTP_STATUS.CREATED_201).json(createdBlog);
 });
 exports.BlogRouter.put('/:id', auth_1.basicAuth, [
     nameValidation_1.nameValidation,
     websiteValidation_1.websiteValidation,
 ], input_validation_middleware_1.inputValidationMiddleware, (req, res) => {
-    const blogId = blogsDB_1.blogsDB.findIndex(v => +v.id === +req.params.id);
+    const blogIsUpdated = blog_data_access_layer_1.blogDataAccessLayer.updateBlog(req.params.id, req.body);
     const apiErrorMsg = [];
-    if (blogId === -1) {
+    if (!blogIsUpdated) {
         apiErrorMsg.push({ message: "ID Not found", field: "id" });
         return res.status(StatusCode_1.HTTP_STATUS.NOT_FOUND_404).json({ errorsMessages: apiErrorMsg });
     }
-    const updatedBlog = Object.assign(Object.assign({}, blogsDB_1.blogsDB[blogId]), { name: req.body.name, description: req.body.description, websiteUrl: req.body.websiteUrl });
-    (0, blogsDB_1.updateBlog)(updatedBlog, blogId);
     return res.status(StatusCode_1.HTTP_STATUS.NO_CONTENT_204).send();
+    // const blogId = blogsDB.findIndex(v => +v.id === +req.params.id)
+    // if (blogId === -1) {
+    //   apiErrorMsg.push({message: "ID Not found", field: "id"})
+    //   return res.status(HTTP_STATUS.NOT_FOUND_404).json({errorsMessages: apiErrorMsg});
+    // }
+    // const updatedBlog: BlogViewModel = {
+    //   ...blogsDB[blogId],
+    //   name: req.body.name,
+    //   description: req.body.description,
+    //   websiteUrl: req.body.websiteUrl,
+    // }
+    //
+    // updateBlog(updatedBlog, blogId)
+    // return res.status(HTTP_STATUS.NO_CONTENT_204).send()
 });
 exports.BlogRouter.delete('/:id', auth_1.basicAuth, (req, res) => {
-    const blogId = blogsDB_1.blogsDB.findIndex(v => v.id === req.params.id);
-    if (blogId === -1) {
+    // const blogId = blogsDB.findIndex(v => v.id === req.params.id)
+    // if (blogId === -1) {
+    //
+    // }
+    //
+    // deleteBlog(req.params.id)
+    // res.status(HTTP_STATUS.NO_CONTENT_204).send()
+    const blog = blog_data_access_layer_1.blogDataAccessLayer.deleteBlog(req.params.id);
+    if (!blog)
         res.status(StatusCode_1.HTTP_STATUS.NOT_FOUND_404).send("Not found");
-    }
-    (0, blogsDB_1.deleteBlog)(req.params.id);
     res.status(StatusCode_1.HTTP_STATUS.NO_CONTENT_204).send();
 });
